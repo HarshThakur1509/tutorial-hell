@@ -1,0 +1,67 @@
+/* styles.css */
+#customButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+#customButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+#customButton:active {
+    transform: scale(0.95);
+}
+
+#customButton svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+#customButton:hover svg {
+    transform: scale(1.1);
+}
+
+#customButton path {
+    fill: #fff;
+}
+
+/* Loading state */
+#customButton.loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+#customButton.loading svg {
+    animation: pulse 1.5s infinite;
+}
+
+.timestamp-tooltip {
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
