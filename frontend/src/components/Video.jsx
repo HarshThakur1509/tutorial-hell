@@ -14,7 +14,9 @@ export const Video = () => {
     isLoading,
   } = useQuery({
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:8080/video/${id}`);
+      const res = await axios.get(
+        `https://tutorial.harshthakur.site/api/video/${id}`
+      );
       // Sort comments by timestamp or ID to maintain consistent order
       return {
         ...res.data,
@@ -30,7 +32,7 @@ export const Video = () => {
   const updateCommentMutation = useMutation({
     mutationFn: async ({ commentId, newBody }) => {
       const response = await axios.put(
-        `http://localhost:8080/comment/${commentId}`,
+        `https://tutorial.harshthakur.site/api/comment/${commentId}`,
         {
           Body: newBody,
         }
@@ -64,7 +66,7 @@ export const Video = () => {
 
   const deleteVideo = async () => {
     try {
-      await axios.delete(`http://localhost:8080/video/${id}`);
+      await axios.delete(`https://tutorial.harshthakur.site/api/video/${id}`);
     } catch (error) {
       console.error("Error deleting video:", error);
     }
@@ -73,7 +75,9 @@ export const Video = () => {
   // Function to handle comment deletion
   const deleteComment = async (commentId) => {
     try {
-      await axios.delete(`http://localhost:8080/comment/${commentId}`);
+      await axios.delete(
+        `https://tutorial.harshthakur.site/api/comment/${commentId}`
+      );
       queryClient.setQueryData(["Video", id], (oldData) => {
         const updatedComments = oldData.Comments.filter(
           (comment) => comment.ID !== commentId

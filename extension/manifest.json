@@ -10,12 +10,13 @@
         "contextMenus"
     ],
     "host_permissions": [
-        "https://www.youtube.com/*",
-        "http://localhost:*"
-    ],
-    "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:* https://www.youtube.com;"
-    },
+    "https://www.youtube.com/*",
+    "https://tutorial.harshthakur.site/*"
+]
+,
+   "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://tutorial.harshthakur.site https://www.youtube.com"
+},
     "content_scripts": [{
         "matches": ["https://www.youtube.com/*"],
         "js": ["content.js"],

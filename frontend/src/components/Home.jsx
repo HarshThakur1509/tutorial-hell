@@ -9,7 +9,7 @@ export const Home = () => {
   const { videos, setVideos } = useContext(videoContext);
 
   const fetchVideos = async () => {
-    const res = await axios.get(`http://localhost:8080/video`);
+    const res = await axios.get(`https://tutorial.harshthakur.site/api/video`);
     setVideos(res.data);
     return res.data;
   };

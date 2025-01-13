@@ -20,7 +20,7 @@ func NewApiServer(addr string) *ApiServer {
 func (s *ApiServer) Run() error {
 	router := http.NewServeMux()
 
-	router.HandleFunc("POST /api/send", controllers.PostVideo)
+	router.HandleFunc("POST /send", controllers.PostVideo)
 
 	router.HandleFunc("GET /video", controllers.ListVideo)
 	router.HandleFunc("GET /video/{id}", controllers.ListVideoId)
@@ -34,8 +34,8 @@ func (s *ApiServer) Run() error {
 	stack := middleware.MiddlewareChain(middleware.Logger, middleware.RecoveryMiddleware)
 
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"}, // Specify your frontend origin
-		AllowCredentials: true,          // Allow cookies and credentials
+		AllowedOrigins:   []string{"https://tutorial.harshthakur.site", "https://www.tutorial.harshthakur.site", "https://www.youtube.com"}, // Specify your frontend origin
+		AllowCredentials: true,                                                                                                              // Allow cookies and credentials
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 	}).Handler(stack(router))

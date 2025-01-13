@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const videoList = document.getElementById('videoList');
 
     try {
-        const response = await fetch('http://localhost:8080/video');
+        const response = await fetch('https://tutorial.harshthakur.site/api/video');
         if (!response.ok) {
             throw new Error('Failed to fetch videos');
         }

@@ -7,7 +7,7 @@ const SELECTORS = {
 };
 
 const API_ENDPOINTS = {
-    SAVE_TIMESTAMP: 'http://localhost:8080/api/send'
+    SAVE_TIMESTAMP: 'https://tutorial.harshthakur.site/api/send'
 };
 
 class YouTubeTimestampManager {
