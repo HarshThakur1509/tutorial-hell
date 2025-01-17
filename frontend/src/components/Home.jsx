@@ -8,8 +8,10 @@ import axios from "axios";
 export const Home = () => {
   const { videos, setVideos } = useContext(videoContext);
 
+  const API = "https://tutorial.harshthakur.site/api";
+
   const fetchVideos = async () => {
-    const res = await axios.get(`https://tutorial.harshthakur.site/api/video`);
+    const res = await axios.get(`${API}/video`);
     setVideos(res.data);
     return res.data;
   };

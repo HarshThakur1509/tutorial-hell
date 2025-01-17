@@ -17,6 +17,28 @@ type Response struct {
 	Time    time.Time `json:"time"`
 }
 
+type HealthResponse struct {
+	Status string `json:"status"`
+	DB     string `json:"database"`
+}
+
+func Health(w http.ResponseWriter, r *http.Request) {
+	response := HealthResponse{Status: "UP", DB: "OK"}
+
+	// Ping the database
+	sqlDB, err := initializers.DB.DB()
+	if err != nil || sqlDB.Ping() != nil {
+		response.DB = "DOWN"
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
+
+	// Write the JSON response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func PostVideo(w http.ResponseWriter, r *http.Request) {
 
 	var body struct {

@@ -8,15 +8,15 @@ export const Video = () => {
   const id = useParams().id;
   const queryClient = useQueryClient();
 
+  const API = "https://tutorial.harshthakur.site/api";
+
   const {
     data: video,
     error,
     isLoading,
   } = useQuery({
     queryFn: async () => {
-      const res = await axios.get(
-        `https://tutorial.harshthakur.site/api/video/${id}`
-      );
+      const res = await axios.get(`${API}/video/${id}`);
       // Sort comments by timestamp or ID to maintain consistent order
       return {
         ...res.data,
@@ -31,12 +31,9 @@ export const Video = () => {
   // Mutation for updating a comment
   const updateCommentMutation = useMutation({
     mutationFn: async ({ commentId, newBody }) => {
-      const response = await axios.put(
-        `https://tutorial.harshthakur.site/api/comment/${commentId}`,
-        {
-          Body: newBody,
-        }
-      );
+      const response = await axios.put(`${API}/comment/${commentId}`, {
+        Body: newBody,
+      });
       return response.data;
     },
     onMutate: async ({ commentId, newBody }) => {
@@ -66,7 +63,7 @@ export const Video = () => {
 
   const deleteVideo = async () => {
     try {
-      await axios.delete(`https://tutorial.harshthakur.site/api/video/${id}`);
+      await axios.delete(`${API}/video/${id}`);
     } catch (error) {
       console.error("Error deleting video:", error);
     }
@@ -75,9 +72,7 @@ export const Video = () => {
   // Function to handle comment deletion
   const deleteComment = async (commentId) => {
     try {
-      await axios.delete(
-        `https://tutorial.harshthakur.site/api/comment/${commentId}`
-      );
+      await axios.delete(`${API}/comment/${commentId}`);
       queryClient.setQueryData(["Video", id], (oldData) => {
         const updatedComments = oldData.Comments.filter(
           (comment) => comment.ID !== commentId

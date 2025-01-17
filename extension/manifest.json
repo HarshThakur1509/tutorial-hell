@@ -11,6 +11,7 @@
     ],
     "host_permissions": [
     "https://www.youtube.com/*",
+    "https://play.google.com/*",
     "https://tutorial.harshthakur.site/*"
 ]
 ,

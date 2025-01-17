@@ -22,6 +22,8 @@ func (s *ApiServer) Run() error {
 
 	router.HandleFunc("POST /send", controllers.PostVideo)
 
+	router.HandleFunc("GET /health", controllers.Health)
+
 	router.HandleFunc("GET /video", controllers.ListVideo)
 	router.HandleFunc("GET /video/{id}", controllers.ListVideoId)
 	router.HandleFunc("DELETE /video/{id}", controllers.DeleteVideo)
