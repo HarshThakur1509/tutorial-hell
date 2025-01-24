@@ -29,19 +29,23 @@ func getWatchID(youtubeURL string) (string, error) {
 // FOR MIDDLEWARE
 
 // isCommentURL checks if the URL path contains /comment
-func IsCommentURL(path string) bool {
+func IsCommentIdURL(path string) bool {
 	match, _ := regexp.MatchString(`^/comment/\d+/?$`, path)
 	return match
 }
 
 // isVideoURL checks if the URL path contains /video
-func IsVideoURL(path string) bool {
+func IsVideoIdURL(path string) bool {
 	match, _ := regexp.MatchString(`^/video/\d+/?$`, path)
+	return match
+}
+func IsVideoURL(path string) bool {
+	match, _ := regexp.MatchString(`^/video/?$`, path)
 	return match
 }
 
 // validateCommentOwnership checks if the comment belongs to the current user
-func ValidateCommentOwnership(w http.ResponseWriter, commentId string, userId uint) bool {
+func ValidateCommentIdOwnership(w http.ResponseWriter, commentId string, userId uint) bool {
 	var comment models.Comment
 	if err := initializers.DB.First(&comment, commentId).Error; err != nil {
 		http.Error(w, "Comment not found", http.StatusNotFound)
@@ -65,7 +69,7 @@ func ValidateCommentOwnership(w http.ResponseWriter, commentId string, userId ui
 }
 
 // validateVideoOwnership checks if the video belongs to the current user
-func ValidateVideoOwnership(w http.ResponseWriter, videoId string, userId uint) bool {
+func ValidateVideoIdOwnership(w http.ResponseWriter, videoId string, userId uint) bool {
 	var video models.VideoData
 	if err := initializers.DB.First(&video, videoId).Error; err != nil {
 		http.Error(w, "Video not found", http.StatusNotFound)
@@ -74,6 +78,16 @@ func ValidateVideoOwnership(w http.ResponseWriter, videoId string, userId uint) 
 
 	if video.UserID != userId {
 		http.Error(w, "Unauthorized: You do not own this video", http.StatusUnauthorized)
+		return false
+	}
+
+	return true
+}
+
+func ValidateVideosOwnership(w http.ResponseWriter, userId uint) bool {
+	var videos []models.VideoData
+	if err := initializers.DB.Find(&videos, "user_id=?", userId).Error; err != nil {
+		http.Error(w, "Videos not found", http.StatusNotFound)
 		return false
 	}
 
