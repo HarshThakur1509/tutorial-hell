@@ -1,53 +1,57 @@
-// popup.js
 document.addEventListener('DOMContentLoaded', async () => {
     const videoList = document.getElementById('videoList');
+    const loginButton = document.getElementById('loginButton');
 
-    try {
-        const response = await fetch('https://tutorial.harshthakur.site/api/video');
-        if (!response.ok) {
-            throw new Error('Failed to fetch videos');
-        }
+    // Check if the user is authenticated
+    const isAuthenticated = await checkAuthentication();
 
-        const videos = await response.json();
-        console.log(videos);
+    if (!isAuthenticated) {
+        videoList.innerHTML = `<div class="no-videos">Please login to view saved timestamps.</div>`;
+        loginButton.style.display = 'block';
+    } else {
+        loginButton.style.display = 'none';
+        loadVideos();
+    }
 
+    loginButton.addEventListener('click', () => {
+        chrome.tabs.create({ url: 'http://localhost/login' });
+    });
 
-        if (videos.length === 0) {
-            videoList.innerHTML = `
-                <div class="no-videos">
-                    No saved timestamps yet. Watch a YouTube video and click the bookmark icon to save timestamps.
-                </div>
-            `;
-            return;
-        }
+    async function checkAuthentication() {
+        return new Promise((resolve) => {
+            chrome.runtime.sendMessage({ type: 'GET_COOKIE' }, (response) => {
+                resolve(response.cookie);
+            });
+        });
+    }
 
-        // Sort videos by savedAt timestamp (most recent first)
-        videos.sort((a, b) => new Date(b.UpdatedAt) - new Date(a.UpdatedAt));
+    async function loadVideos() {
+        try {
+            const response = await fetch('http://localhost:3000/video', { credentials: 'include' });
+            if (!response.ok) throw new Error('Failed to fetch videos');
 
-        videoList.innerHTML = videos.map(video => {
-            const savedDate = new Date(video.CreatedAt).toLocaleString();
-            // Create URL with timestamp
-            const videoUrl = `https://www.youtube.com/watch?v=${video.WatchID}`;
+            const videos = await response.json();
+            if (videos.length === 0) {
+                videoList.innerHTML = `<div class="no-videos">No saved timestamps yet.</div>`;
+                return;
+            }
 
-            return `
+            videos.sort((a, b) => new Date(b.UpdatedAt) - new Date(a.UpdatedAt));
+
+            videoList.innerHTML = videos.map(video => `
                 <div class="video-item">
-                <img id = "thumbnail" src = "https://img.youtube.com/vi/${video.WatchID}/default.jpg" alt = "${video.Title}" />
-                    <a href='${videoUrl}' target='_blank'>
+                    <img id="thumbnail" src="https://img.youtube.com/vi/${video.WatchID}/mqdefault.jpg" alt="${video.Title}" />
+                    <a href='https://www.youtube.com/watch?v=${video.WatchID}' target='_blank'>
                         ${video.Title || 'Untitled Video'}
                     </a>
                     <div class="video-time">
-                        <span class="saved-at">Saved on ${savedDate}</span>
+                        <span class="saved-at">Saved on ${new Date(video.CreatedAt).toLocaleString()}</span>
                     </div>
                 </div>
-            `;
-        }).join('');
-
-    } catch (error) {
-        videoList.innerHTML = `
-            <div class="error">
-                Error loading saved videos. Please make sure the backend server is running.
-            </div>
-        `;
-        console.error('Error:', error);
+            `).join('');
+        } catch (error) {
+            videoList.innerHTML = `<div class="error">Error loading saved videos.</div>`;
+            console.error('Error:', error);
+        }
     }
 });

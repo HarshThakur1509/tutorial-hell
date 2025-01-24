@@ -6,17 +6,12 @@ const SELECTORS = {
     CUSTOM_BUTTON: '#customButton'
 };
 
-const API_ENDPOINTS = {
-    SAVE_TIMESTAMP: 'https://tutorial.harshthakur.site/api/send'
-};
-
 class YouTubeTimestampManager {
     constructor() {
         this.isLoading = false;
         this.buttonContainer = null;
         this.button = null;
         this.observer = null;
-        this.lastKnownTime = 0;
         this.retryAttempts = 3;
         this.retryDelay = 1000;
     }
@@ -57,25 +52,23 @@ class YouTubeTimestampManager {
         const color = success ? '#2ecc71' : '#e74c3c';
         const message = success ? 'Timestamp saved!' : 'Error saving timestamp';
 
-        // Visual feedback on button
         this.button.style.backgroundColor = color;
 
-        // Create tooltip
         const tooltip = document.createElement('div');
         tooltip.className = 'timestamp-tooltip';
         tooltip.textContent = message;
         tooltip.style.cssText = `
-        position: absolute;
-        background: ${color};
-        color: white;
-        padding: 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        bottom: 45px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.3s;
-      `;
+            position: absolute;
+            background: ${color};
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            bottom: 45px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        `;
 
         this.buttonContainer.appendChild(tooltip);
         requestAnimationFrame(() => tooltip.style.opacity = '1');
@@ -119,18 +112,24 @@ class YouTubeTimestampManager {
 
     async saveTimestamp(data, attempts = this.retryAttempts) {
         try {
-            const response = await fetch(API_ENDPOINTS.SAVE_TIMESTAMP, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+            const { success, cookie, error } = await new Promise((resolve) => {
+                chrome.runtime.sendMessage({ type: 'GET_COOKIE' }, (response) => {
+                    resolve(response);
+                });
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!success) throw new Error(error || 'User is not authenticated.');
 
-            return await response.json();
+            const response = await new Promise((resolve) => {
+                chrome.runtime.sendMessage({ type: 'SEND_DATA', data: data }, (response) => {
+                    resolve(response);
+                });
+            });
+
+            if (!response.success) throw new Error(response.error || 'Failed to send data to backend');
+            return response.data;
         } catch (error) {
+            console.error('Error saving timestamp:', error);
             if (attempts > 1) {
                 await new Promise(resolve => setTimeout(resolve, this.retryDelay));
                 return this.saveTimestamp(data, attempts - 1);
@@ -142,21 +141,15 @@ class YouTubeTimestampManager {
     async handleButtonClick() {
         if (this.isLoading) return;
 
+        this.isLoading = true;
+        this.button.classList.add('loading');
+
         try {
-            this.isLoading = true;
-            this.button.classList.add('loading');
-
             const videoInfo = await this.getCurrentVideoInfo();
-
-            // Save current time in case of error
-            this.lastKnownTime = videoInfo.timestamp;
-
             await this.saveTimestamp(videoInfo);
             this.showFeedback(true);
 
-            // Notify background script for badge update
             chrome.runtime.sendMessage({ type: 'TIMESTAMP_SAVED', data: videoInfo });
-
         } catch (error) {
             console.error('Error saving timestamp:', error);
             this.showFeedback(false);
@@ -176,7 +169,6 @@ class YouTubeTimestampManager {
     init() {
         this.addCustomButton();
 
-        // Create observer for dynamic content changes
         this.observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.addedNodes.length) {
@@ -185,10 +177,8 @@ class YouTubeTimestampManager {
             }
         });
 
-        // Start observing with a more specific target
         this.observer.observe(document.body, { childList: true, subtree: true });
 
-        // Clean up on navigation
         window.addEventListener('beforeunload', () => {
             this.observer?.disconnect();
         });

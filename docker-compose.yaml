@@ -1,46 +1,58 @@
 services:
-  frontend:
+  client:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
+      - "80:80"
+    environment:
+      - NODE_ENV=production
     depends_on:
-      - backend
+      - server
 
-  backend:
+  server:
     build:
-      context: ./backend
+      context: ./server
       dockerfile: Dockerfile
     environment:
-      - DB_USER=postgres
-      - DB_PASSWORD=password
-      - DB_NAME=youtube
-      - DB_HOST=postgres
-      - DB_PORT=5432
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - SECRET=${SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_CALLBACK_URL=${GOOGLE_CALLBACK_URL}
+      - REDIRECT_SECURE=${REDIRECT_SECURE}
+      - SESSION_COOKIE_DOMAIN=${SESSION_COOKIE_DOMAIN}
     ports:
-      - "8080:8080"
+      - "3000:3000"
     depends_on:
-      - postgres
-    restart: always
+      postgres:
+        condition: service_healthy
     healthcheck:
-      test:
-        ["CMD", "curl", "-f", "https://tutorial.harshthakur.site/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   postgres:
-    image: postgres
+    image: postgres:17
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: youtube
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     restart: always
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
 
 volumes:
   postgres-data:

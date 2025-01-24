@@ -1,0 +1,319 @@
+/* Global Styles */
+:root {
+    --primary-color: #EB7674;
+    /* Blue */
+    --secondary-color: #e25957;
+    /* Dark Blue */
+    --background-color: #ffffff;
+    /* Light background */
+    --text-color: #1f2937;
+    /* Dark text */
+    --card-background: #f3f4f6;
+    /* Light card background */
+    --border-color: #e5e7eb;
+    /* Light border */
+    --error-color: #dc2626;
+    /* Red */
+    --success-color: #16a34a;
+    /* Green */
+    --border-radius: 12px;
+    /* Slightly larger border radius */
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    --background-color: #1f2937;
+    /* Dark background */
+    --text-color: #f3f4f6;
+    /* Light text */
+    --card-background: #374151;
+    /* Dark card background */
+    --border-color: #4b5563;
+    /* Dark border */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: var(--transition);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--card-background);
+    color: var(--text-color);
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Navbar Styles */
+.Nav {
+    background-color: var(--card-background);
+    padding: 1rem 2rem;
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.Nav nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    /* Adjust the size of the logo */
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+    /* Add a hover effect to the logo */
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    /* Space between elements */
+}
+
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.logout-button {
+    background-color: var(--error-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.logout-button:hover {
+    opacity: 0.9;
+}
+
+/* Home Page Styles */
+.Home {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.Home h1 {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.Home ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.Home ul div {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.Home ul div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.Home ul div a {
+    display: block;
+    margin-top: 1rem;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Video Page Styles */
+.Video {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.Video h2 {
+    margin: 1rem 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.Video button {
+    background-color: var(--error-color);
+    color: white;
+    margin-bottom: 1rem;
+}
+
+/* Comment Styles */
+.Comment {
+    margin-top: 2rem;
+}
+
+.Comment .card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.Comment .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.Comment textarea {
+    margin-top: 1rem;
+}
+
+.Comment button {
+    background-color: var(--primary-color);
+    color: white;
+    margin-top: 0.5rem;
+}
+
+/* Login and Register Styles */
+.Login,
+.Register {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+
+.Login h1,
+.Register h1 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.Login form,
+.Register form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.Login form button,
+.Register form button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Theme Toggle Icons */
+.theme-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.theme-toggle .theme-icon {
+    transition: var(--transition);
+    opacity: 0.5;
+}
+
+.theme-toggle .theme-icon:first-child {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .theme-icon:first-child {
+    display: inline;
+}
+
+[data-theme="dark"] .theme-toggle .theme-icon:last-child {
+    display: none;
+}
+
+.theme-toggle:hover .theme-icon {
+    opacity: 1;
+}
