@@ -13,7 +13,7 @@ async function sendDataToBackend(data) {
     try {
         const cookieName = '_gothic_session';
         const backendUrl = 'http://localhost:3000';
-        const frontendUrl = 'http://localhost:5173';
+        const frontendUrl = 'http://localhost';
 
         // Retrieve the session cookie
         const cookie = await new Promise((resolve, reject) => {
@@ -42,7 +42,7 @@ async function sendDataToBackend(data) {
 }
 const getCookie = async () => {
     return new Promise((resolve) => {
-        chrome.cookies.get({ url: 'http://localhost:5173', name: '_gothic_session' }, (cookie) => {
+        chrome.cookies.get({ url: 'http://localhost', name: '_gothic_session' }, (cookie) => {
             resolve(cookie ? { success: true, cookie: cookie.value } : { success: false, error: 'No auth cookie found' });
         });
     });

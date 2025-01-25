@@ -56,7 +56,7 @@ func (s *ApiServer) Run() error {
 		// AllowedOrigins:   []string{"https://tutorial.harshthakur.site", "https://www.tutorial.harshthakur.site", "https://www.youtube.com"}, // Specify your frontend origin
 		AllowedOrigins: []string{
 			"chrome-extension://ookoamekfiigagodlifaglakmjggchen", // Allow Chrome extension
-			"http://localhost:5173",
+			"http://localhost",
 			"https://www.youtube.com"}, // Specify your frontend origin
 		AllowCredentials: true, // Allow cookies and credentials
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

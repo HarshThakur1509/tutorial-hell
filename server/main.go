@@ -13,7 +13,6 @@ import (
 )
 
 func init() {
-	initializers.LoadEnv()
 	initializers.ConnectDB()
 
 	clientID := os.Getenv("GOOGLE_CLIENT_ID")
@@ -29,12 +28,10 @@ func init() {
 	if sessionSecret == "" {
 		sessionSecret = "default-session-secret"
 	}
-	log.Println("session key: ", sessionSecret)
 
 	store := sessions.NewCookieStore([]byte(sessionSecret))
 
 	isProduction := os.Getenv("ENV") == "production"
-	log.Println("is production: ", isProduction)
 
 	domain := os.Getenv("SESSION_COOKIE_DOMAIN")
 	if domain == "" {

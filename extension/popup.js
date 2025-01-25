@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loginButton.addEventListener('click', () => {
-        chrome.tabs.create({ url: 'http://localhost:5173/login' });
+        chrome.tabs.create({ url: 'http://localhost/login' });
     });
 
     async function checkAuthentication() {

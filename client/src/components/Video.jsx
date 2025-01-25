@@ -70,31 +70,43 @@ export const Video = () => {
   if (error) return <div>Error loading video: {error.message}</div>;
 
   return (
-    <div className="video-container">
-      <VideoEmbed
-        src={`https://www.youtube.com/embed/${video.WatchID}`}
-        title={video.Title}
-        width="50%"
-      />
+    <div className="video-page-container">
+      <div className="video-main-content">
+        <div className="video-player-container">
+          <VideoEmbed
+            src={`https://www.youtube.com/embed/${video.WatchID}`}
+            title={video.Title}
+            width={"100%"}
+            // height={"360px"}
+          />
+        </div>
 
-      <div className="video-header">
-        <h1>{video.Title}</h1>
-        <button
-          onClick={() => {
-            if (window.confirm("Delete this video?")) deleteVideo.mutate();
-          }}
-          aria-label="Delete video"
-          disabled={deleteVideo.isLoading}
-        >
-          {deleteVideo.isLoading ? "Deleting..." : "Delete Video"}
-        </button>
+        <div className="video-metadata">
+          <h1 className="video-title">{video.Title}</h1>
+
+          <div className="video-actions">
+            <button
+              onClick={() => {
+                if (window.confirm("Delete this video?")) deleteVideo.mutate();
+              }}
+              className="delete-video-btn"
+              aria-label="Delete video"
+              disabled={deleteVideo.isLoading}
+            >
+              {deleteVideo.isLoading ? "Deleting..." : "Delete Video"}
+            </button>
+          </div>
+        </div>
+
+        <div className="comments-section">
+          <h2 className="comments-title">Comments</h2>
+          <Comment
+            video={video}
+            updateCommentMutation={updateCommentMutation}
+            deleteComment={deleteComment.mutate}
+          />
+        </div>
       </div>
-
-      <Comment
-        video={video}
-        updateCommentMutation={updateCommentMutation}
-        deleteComment={deleteComment.mutate}
-      />
     </div>
   );
 };

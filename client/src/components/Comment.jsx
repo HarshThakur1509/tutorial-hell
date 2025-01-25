@@ -48,7 +48,7 @@ export const Comment = memo(
     );
 
     return (
-      <div className="space-y-4 comments-section">
+      <div className="comments-section">
         {sortedComments.map((comment) => {
           const state = commentStates[comment.ID] || {};
           return (
@@ -57,9 +57,11 @@ export const Comment = memo(
               className={`comment-card ${state.expanded ? "expanded" : ""}`}
             >
               <div className="comment-header">
-                <time className="comment-time">
-                  {formatTime(comment.Timestamp)}
-                </time>
+                <div className="comment-meta">
+                  <time className="comment-time">
+                    {formatTime(comment.Timestamp)}
+                  </time>
+                </div>
                 <div className="comment-actions">
                   <button
                     onClick={() => handleToggle(comment.ID)}
@@ -67,7 +69,7 @@ export const Comment = memo(
                     aria-label={state.expanded ? "Collapse" : "Edit"}
                     disabled={updateCommentMutation.isPending}
                   >
-                    {state.expanded ? "Collapse" : "Edit"}
+                    {state.expanded ? "Cancel" : "✏️"}
                   </button>
                   <button
                     onClick={() => deleteComment(comment.ID)}
@@ -75,7 +77,7 @@ export const Comment = memo(
                     aria-label="Delete"
                     disabled={updateCommentMutation.isPending}
                   >
-                    Delete
+                    🗑️
                   </button>
                 </div>
               </div>
@@ -91,20 +93,20 @@ export const Comment = memo(
                     disabled={updateCommentMutation.isPending}
                     aria-label="Edit comment"
                   />
-                  <button
-                    onClick={() => handleSubmit(comment.ID)}
-                    className="submit-edit-btn"
-                    disabled={updateCommentMutation.isPending}
-                  >
-                    {updateCommentMutation.isPending
-                      ? "Saving..."
-                      : "Save Changes"}
-                  </button>
-                  {updateCommentMutation.isError && (
-                    <p className="error-message">
-                      Error saving: {updateCommentMutation.error.message}
-                    </p>
-                  )}
+                  <div className="comment-form-actions">
+                    <button
+                      onClick={() => handleSubmit(comment.ID)}
+                      className="submit-edit-btn"
+                      disabled={updateCommentMutation.isPending}
+                    >
+                      {updateCommentMutation.isPending ? "Saving..." : "Save"}
+                    </button>
+                    {updateCommentMutation.isError && (
+                      <p className="error-message">
+                        Error: {updateCommentMutation.error.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <p className="comment-body">{comment.Body}</p>

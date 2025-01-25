@@ -33,6 +33,7 @@ export const Home = () => {
   if (isLoading) return <p>Loading videos...</p>;
   if (isError) return <p>Error loading videos: {error.message}</p>;
 
+  // In your return statement:
   return (
     <div className="video-grid">
       <h1 className="page-title">Videos</h1>
@@ -40,12 +41,20 @@ export const Home = () => {
         {videos?.map((video) => (
           <article key={video.ID} className="video-card">
             <Link to={`/video/${video.ID}`} aria-label={`View ${video.Title}`}>
-              <VideoThumbnail
-                src={video.WatchID}
-                alt={video.Title}
-                width={"40%"}
-              />
-              <h3 className="video-title">{video.Title}</h3>
+              <div className="thumbnail-container">
+                <VideoThumbnail
+                  src={video.WatchID}
+                  alt={video.Title}
+                  width="100%"
+                />
+              </div>
+              <div className="video-info">
+                <h3 className="video-title">{video.Title}</h3>
+                <div className="video-metadata">
+                  <span>Channel Name</span> {/* Add your channel data */}
+                  <span>Views • Time ago</span> {/* Add your metadata */}
+                </div>
+              </div>
             </Link>
           </article>
         ))}
