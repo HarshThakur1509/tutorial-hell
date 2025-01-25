@@ -31,21 +31,22 @@ func (s *ApiServer) Run() error {
 	router.HandleFunc("GET /auth", gothic.BeginAuthHandler)
 	router.HandleFunc("GET /auth/callback", controllers.GoogleCallbackHandler)
 
+	router.HandleFunc("GET /cookie", controllers.GetCookie)
+
 	authRouter := http.NewServeMux()
 
 	authRouter.HandleFunc("GET /auth/logout", controllers.GothLogout)
-	authRouter.HandleFunc("GET /validate", controllers.ValidateUser)
 	authRouter.HandleFunc("GET /api/user", controllers.GetUser)
 	// authRouter.HandleFunc("GET /logout", controllers.CustomLogout)
 
 	authRouter.HandleFunc("POST /send", controllers.PostVideo)
 
-	authRouter.HandleFunc("GET /video", middleware.UserDataAllowedMiddleware(http.HandlerFunc(controllers.ListVideo)))
-	authRouter.HandleFunc("GET /video/{id}", middleware.UserDataAllowedMiddleware(http.HandlerFunc(controllers.ListVideoId)))
-	authRouter.HandleFunc("DELETE /video/{id}", middleware.UserDataAllowedMiddleware(http.HandlerFunc(controllers.DeleteVideo)))
+	authRouter.HandleFunc("GET /video", middleware.UserDataAllowedMiddleware(controllers.ListVideo))
+	authRouter.HandleFunc("GET /video/{id}", middleware.UserDataAllowedMiddleware(controllers.ListVideoId))
+	authRouter.HandleFunc("DELETE /video/{id}", middleware.UserDataAllowedMiddleware(controllers.DeleteVideo))
 
-	authRouter.HandleFunc("DELETE /comment/{id}", middleware.UserDataAllowedMiddleware(http.HandlerFunc(controllers.DeleteComment)))
-	authRouter.HandleFunc("PUT /comment/{id}", middleware.UserDataAllowedMiddleware(http.HandlerFunc(controllers.UpdateComment)))
+	authRouter.HandleFunc("DELETE /comment/{id}", middleware.UserDataAllowedMiddleware(controllers.DeleteComment))
+	authRouter.HandleFunc("PUT /comment/{id}", middleware.UserDataAllowedMiddleware(controllers.UpdateComment))
 
 	router.Handle("/", middleware.AuthMiddleware(authRouter))
 
@@ -55,7 +56,7 @@ func (s *ApiServer) Run() error {
 		// AllowedOrigins:   []string{"https://tutorial.harshthakur.site", "https://www.tutorial.harshthakur.site", "https://www.youtube.com"}, // Specify your frontend origin
 		AllowedOrigins: []string{
 			"chrome-extension://ookoamekfiigagodlifaglakmjggchen", // Allow Chrome extension
-			"http://localhost",
+			"http://localhost:5173",
 			"https://www.youtube.com"}, // Specify your frontend origin
 		AllowCredentials: true, // Allow cookies and credentials
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

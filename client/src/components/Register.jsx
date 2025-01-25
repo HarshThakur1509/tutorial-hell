@@ -1,15 +1,14 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext } from "react";
-import { videoContext } from "../App";
 import { Navigate, Link } from "react-router-dom";
 import axios from "axios";
+import useCheckCookie from "./useCheckCookie";
 
 const API = "http://localhost:3000";
 
 export const Register = () => {
-  const { auth, setAuth } = useContext(videoContext);
+  const { cookieExists } = useCheckCookie();
 
   const schema = yup.object().shape({
     name: yup.string().required("Name is required"),
@@ -27,14 +26,12 @@ export const Register = () => {
     try {
       await axios.post(`${API}/register`, formData, { withCredentials: true });
       await axios.post(`${API}/login`, formData, { withCredentials: true });
-      localStorage.setItem("login", "true");
-      setAuth(true);
     } catch (err) {
       console.error("Registration failed:", err);
     }
   };
 
-  if (auth) return <Navigate to="/" />;
+  if (cookieExists) return <Navigate to="/" />;
 
   return (
     <div className="Register">

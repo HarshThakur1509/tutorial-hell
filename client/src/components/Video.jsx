@@ -1,15 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { VideoEmbed } from "./VideoEmbed";
 import { Comment } from "./Comment";
 import axios from "axios";
-import { useMemo } from "react";
 
 const API = "http://localhost:3000";
 
 export const Video = () => {
   const { id } = useParams();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     data: video,
@@ -27,9 +27,10 @@ export const Video = () => {
         ),
       };
     },
-    queryKey: ["Video", id],
+    queryKey: ["video", id],
   });
 
+  // Add back the missing mutation
   const updateCommentMutation = useMutation({
     mutationFn: async ({ commentId, newBody }) => {
       const response = await axios.put(
@@ -40,10 +41,10 @@ export const Video = () => {
       return response.data;
     },
     onMutate: async ({ commentId, newBody }) => {
-      await queryClient.cancelQueries(["Video", id]);
-      const previousVideo = queryClient.getQueryData(["Video", id]);
+      await queryClient.cancelQueries(["video", id]);
+      const previousVideo = queryClient.getQueryData(["video", id]);
 
-      queryClient.setQueryData(["Video", id], (oldData) => ({
+      queryClient.setQueryData(["video", id], (oldData) => ({
         ...oldData,
         Comments: oldData.Comments.map((comment) =>
           comment.ID === commentId ? { ...comment, Body: newBody } : comment
@@ -53,27 +54,33 @@ export const Video = () => {
       return { previousVideo };
     },
     onError: (err, variables, context) => {
-      queryClient.setQueryData(["Video", id], context.previousVideo);
+      queryClient.setQueryData(["video", id], context.previousVideo);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["Video", id]);
+      queryClient.invalidateQueries(["video", id]);
     },
   });
 
   const deleteVideo = async () => {
+    if (!window.confirm("Are you sure you want to delete this video?")) return;
+
     try {
       await axios.delete(`${API}/video/${id}`, { withCredentials: true });
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("Error deleting video:", error);
+      alert("Failed to delete video. Please try again.");
     }
   };
 
   const deleteComment = async (commentId) => {
+    if (!window.confirm("Delete this comment permanently?")) return;
+
     try {
       await axios.delete(`${API}/comment/${commentId}`, {
         withCredentials: true,
       });
-      queryClient.setQueryData(["Video", id], (oldData) => ({
+      queryClient.setQueryData(["video", id], (oldData) => ({
         ...oldData,
         Comments: oldData.Comments.filter(
           (comment) => comment.ID !== commentId
@@ -81,26 +88,35 @@ export const Video = () => {
       }));
     } catch (error) {
       console.error("Error deleting comment:", error);
+      alert("Failed to delete comment. Please try again.");
     }
   };
 
-  const memoizedVideo = useMemo(() => video, [video]);
-
-  if (isLoading) return <div>Fetching posts...</div>;
-  if (error) return <div>An error occurred: {error.message}</div>;
+  if (isLoading) return <div>Loading video...</div>;
+  if (error) return <div>Error loading video: {error.message}</div>;
 
   return (
-    <div>
+    <div className="video-container">
       <VideoEmbed
-        width="560"
-        height="315"
-        src={`https://www.youtube.com/embed/${memoizedVideo.WatchID}`}
-        title={memoizedVideo.Title}
+        width="100%"
+        height="480"
+        src={`https://www.youtube.com/embed/${video.WatchID}`}
+        title={video.Title}
       />
-      <h2>{memoizedVideo.Title}</h2>
-      <button onClick={deleteVideo}>Delete Video</button>
+
+      <div className="video-header">
+        <h2>{video.Title}</h2>
+        <button
+          onClick={deleteVideo}
+          className="delete-video-btn"
+          aria-label="Delete video"
+        >
+          Delete Video
+        </button>
+      </div>
+
       <Comment
-        video={memoizedVideo}
+        video={video}
         updateCommentMutation={updateCommentMutation}
         deleteComment={deleteComment}
       />

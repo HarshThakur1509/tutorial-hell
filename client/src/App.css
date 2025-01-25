@@ -288,18 +288,29 @@ textarea:focus {
 
 /* Theme Toggle Icons */
 .theme-toggle {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-left: 1rem;
     font-size: 1.5rem;
     transition: var(--transition);
 }
 
 .theme-toggle .theme-icon {
+    background: transparent;
+    box-shadow: none;
     transition: var(--transition);
     opacity: 0.5;
+}
+
+.theme-icon {
+    font-size: 1.2rem;
+    /* Adjust emoji size if needed */
+    line-height: 1;
 }
 
 .theme-toggle .theme-icon:first-child {

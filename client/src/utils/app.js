@@ -14,4 +14,5 @@ const formatTime = (seconds) => {
         : `${mins}:${formattedSecs}`;
 };
 
-export { formatTime }
+
+export { formatTime };

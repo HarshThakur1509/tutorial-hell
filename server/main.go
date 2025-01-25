@@ -13,6 +13,7 @@ import (
 )
 
 func init() {
+	initializers.LoadEnv()
 	initializers.ConnectDB()
 
 	clientID := os.Getenv("GOOGLE_CLIENT_ID")
