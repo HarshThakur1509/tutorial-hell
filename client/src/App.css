@@ -460,37 +460,182 @@ textarea:focus {
 }
 
 
-
-/* Login and Register Styles */
-.Login,
-.Register {
-    max-width: 400px;
-    margin: 2rem auto;
+/* Auth Components */
+.auth-container {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
     padding: 2rem;
+    background-color: var(--background-color);
+}
+
+.auth-card {
     background-color: var(--card-background);
+    padding: 2.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    text-align: center;
+    width: 100%;
+    max-width: 440px;
+    transition: var(--transition);
 }
 
-.Login h1,
-.Register h1 {
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
+.auth-title {
+    font-size: 1.75rem;
     font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: var(--text-color);
 }
 
-.Login form,
-.Register form {
+.auth-subtitle {
+    color: var(--text-color);
+    opacity: 0.8;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.Login form button,
-.Register form button {
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.input-field:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(235, 118, 116, 0.1);
+}
+
+.input-field.input-error {
+    border-color: var(--error-color);
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    padding-left: 0.5rem;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 1rem;
     background-color: var(--primary-color);
     color: white;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.auth-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.auth-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.social-login-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.social-login-btn:hover {
+    background-color: var(--hover-background);
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+.divider-text {
+    color: var(--text-color);
+    opacity: 0.6;
+    font-size: 0.875rem;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.auth-link {
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.auth-link:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 1rem;
+    }
+
+    .auth-card {
+        padding: 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 1.5rem;
+    }
 }
 
 /* Theme Toggle Icons */
