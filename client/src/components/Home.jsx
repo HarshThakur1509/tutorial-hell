@@ -50,10 +50,10 @@ export const Home = () => {
               </div>
               <div className="video-info">
                 <h3 className="video-title">{video.Title}</h3>
-                <div className="video-metadata">
-                  <span>Channel Name</span> {/* Add your channel data */}
-                  <span>Views • Time ago</span> {/* Add your metadata */}
-                </div>
+                {/* <div className="video-metadata">
+                  <span>Channel Name</span>
+                  <span>Views • Time ago</span>
+                </div> */}
               </div>
             </Link>
           </article>
