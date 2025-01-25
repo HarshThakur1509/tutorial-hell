@@ -29,6 +29,7 @@ export const Login = () => {
   const onSubmit = async (formData) => {
     try {
       await axios.post(`${API}/login`, formData, { withCredentials: true });
+      window.location.reload();
     } catch (err) {
       console.error("Login failed:", err);
     }

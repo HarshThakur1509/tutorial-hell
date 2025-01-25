@@ -41,7 +41,7 @@ func (s *ApiServer) Run() error {
 
 	authRouter.HandleFunc("POST /send", controllers.PostVideo)
 
-	authRouter.HandleFunc("GET /video", middleware.UserDataAllowedMiddleware(controllers.ListVideo))
+	authRouter.HandleFunc("GET /video", controllers.ListVideo)
 	authRouter.HandleFunc("GET /video/{id}", middleware.UserDataAllowedMiddleware(controllers.ListVideoId))
 	authRouter.HandleFunc("DELETE /video/{id}", middleware.UserDataAllowedMiddleware(controllers.DeleteVideo))
 

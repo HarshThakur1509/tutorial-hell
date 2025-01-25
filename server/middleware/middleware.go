@@ -104,10 +104,10 @@ func UserDataAllowedMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		// Get the resource ID from the URL path
 		id := r.PathValue("id")
-		// if id == "" {
-		// 	http.Error(w, "Resource ID is required", http.StatusBadRequest)
-		// 	return
-		// }
+		if id == "" {
+			http.Error(w, "Resource ID is required", http.StatusBadRequest)
+			return
+		}
 
 		// Check the URL path using regex to determine the type of resource
 		switch {
@@ -118,11 +118,6 @@ func UserDataAllowedMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		case controllers.IsVideoIdURL(r.URL.Path):
 			if !controllers.ValidateVideoIdOwnership(w, id, uint(userId)) {
-				return
-			}
-
-		case controllers.IsVideoURL(r.URL.Path):
-			if !controllers.ValidateVideosOwnership(w, uint(userId)) {
 				return
 			}
 

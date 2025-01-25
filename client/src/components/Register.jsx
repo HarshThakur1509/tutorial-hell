@@ -26,6 +26,7 @@ export const Register = () => {
     try {
       await axios.post(`${API}/register`, formData, { withCredentials: true });
       await axios.post(`${API}/login`, formData, { withCredentials: true });
+      window.location.reload();
     } catch (err) {
       console.error("Registration failed:", err);
     }

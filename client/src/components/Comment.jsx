@@ -1,103 +1,117 @@
-import { useState, memo } from "react";
+import { useState, memo, useCallback, useMemo } from "react";
 import { formatTime } from "../utils/app.js";
 import PropTypes from "prop-types";
 
 export const Comment = memo(
   ({ video, updateCommentMutation, deleteComment }) => {
-    const [expandedComments, setExpandedComments] = useState(new Set());
-    const [editText, setEditText] = useState({});
+    // Store expanded state and edit text per comment
+    const [commentStates, setCommentStates] = useState({});
 
-    const handleToggle = (commentId) => {
-      setExpandedComments((prev) => {
-        const newSet = new Set(prev);
-        newSet.has(commentId)
-          ? newSet.delete(commentId)
-          : newSet.add(commentId);
-        return newSet;
-      });
-
-      if (!editText[commentId]) {
-        setEditText((prev) => ({
+    const handleToggle = useCallback(
+      (commentId) => {
+        setCommentStates((prev) => ({
           ...prev,
-          [commentId]: video.Comments.find((c) => c.ID === commentId).Body,
+          [commentId]: {
+            expanded: !prev[commentId]?.expanded,
+            text:
+              prev[commentId]?.text ||
+              video.Comments.find((c) => c.ID === commentId).Body,
+          },
         }));
-      }
-    };
+      },
+      [video.Comments]
+    );
 
-    const handleTextChange = (commentId, value) => {
-      setEditText((prev) => ({ ...prev, [commentId]: value }));
-    };
+    const handleTextChange = useCallback((commentId, value) => {
+      setCommentStates((prev) => ({
+        ...prev,
+        [commentId]: {
+          ...prev[commentId],
+          text: value,
+        },
+      }));
+    }, []);
 
-    const handleSubmit = (commentId) => {
-      updateCommentMutation.mutate({ commentId, newBody: editText[commentId] });
-    };
+    const handleSubmit = useCallback(
+      (commentId) => {
+        updateCommentMutation.mutate({
+          commentId,
+          newBody: commentStates[commentId]?.text || "",
+        });
+      },
+      [commentStates, updateCommentMutation]
+    );
 
-    const sortedComments = [...video.Comments].sort(
-      (a, b) => a.Timestamp - b.Timestamp
+    const sortedComments = useMemo(
+      () => [...video.Comments].sort((a, b) => a.Timestamp - b.Timestamp),
+      [video.Comments]
     );
 
     return (
       <div className="space-y-4 comments-section">
-        {sortedComments.map((comment) => (
-          <div
-            key={comment.ID}
-            className={`comment-card ${
-              expandedComments.has(comment.ID) ? "expanded" : ""
-            }`}
-          >
-            <div className="comment-header">
-              <time className="comment-time">
-                {formatTime(comment.Timestamp)}
-              </time>
-
-              <div className="comment-actions">
-                <button
-                  onClick={() => handleToggle(comment.ID)}
-                  className="toggle-btn"
-                  aria-label={
-                    expandedComments.has(comment.ID)
-                      ? "Collapse comment"
-                      : "Edit comment"
-                  }
-                  disabled={updateCommentMutation.isPending}
-                >
-                  {expandedComments.has(comment.ID) ? "Collapse" : "Edit"}
-                </button>
-
-                <button
-                  onClick={() => deleteComment(comment.ID)}
-                  className="delete-comment-btn"
-                  aria-label="Delete comment"
-                  disabled={updateCommentMutation.isPending}
-                >
-                  Delete
-                </button>
+        {sortedComments.map((comment) => {
+          const state = commentStates[comment.ID] || {};
+          return (
+            <div
+              key={comment.ID}
+              className={`comment-card ${state.expanded ? "expanded" : ""}`}
+            >
+              <div className="comment-header">
+                <time className="comment-time">
+                  {formatTime(comment.Timestamp)}
+                </time>
+                <div className="comment-actions">
+                  <button
+                    onClick={() => handleToggle(comment.ID)}
+                    className="toggle-btn"
+                    aria-label={state.expanded ? "Collapse" : "Edit"}
+                    disabled={updateCommentMutation.isPending}
+                  >
+                    {state.expanded ? "Collapse" : "Edit"}
+                  </button>
+                  <button
+                    onClick={() => deleteComment(comment.ID)}
+                    className="delete-comment-btn"
+                    aria-label="Delete"
+                    disabled={updateCommentMutation.isPending}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
+
+              {state.expanded ? (
+                <div className="edit-comment-form">
+                  <textarea
+                    value={state.text || ""}
+                    onChange={(e) =>
+                      handleTextChange(comment.ID, e.target.value)
+                    }
+                    className="comment-textarea"
+                    disabled={updateCommentMutation.isPending}
+                    aria-label="Edit comment"
+                  />
+                  <button
+                    onClick={() => handleSubmit(comment.ID)}
+                    className="submit-edit-btn"
+                    disabled={updateCommentMutation.isPending}
+                  >
+                    {updateCommentMutation.isPending
+                      ? "Saving..."
+                      : "Save Changes"}
+                  </button>
+                  {updateCommentMutation.isError && (
+                    <p className="error-message">
+                      Error saving: {updateCommentMutation.error.message}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="comment-body">{comment.Body}</p>
+              )}
             </div>
-
-            {expandedComments.has(comment.ID) ? (
-              <div className="edit-comment-form">
-                <textarea
-                  value={editText[comment.ID] || ""}
-                  onChange={(e) => handleTextChange(comment.ID, e.target.value)}
-                  className="comment-textarea"
-                  disabled={updateCommentMutation.isPending}
-                />
-                <button
-                  onClick={() => handleSubmit(comment.ID)}
-                  className="submit-edit-btn"
-                  disabled={updateCommentMutation.isPending}
-                >
-                  {updateCommentMutation.isPending
-                    ? "Saving..."
-                    : "Save Changes"}
-                </button>
-              </div>
-            ) : (
-              <p className="comment-body">{comment.Body}</p>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   }

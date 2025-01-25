@@ -7,7 +7,7 @@ const API = "http://localhost:3000";
 
 export const Nav = () => {
   const navigate = useNavigate();
-  const { cookieExists } = useCheckCookie();
+  const { cookieExists, refreshCookie } = useCheckCookie();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Persist theme preference
@@ -31,13 +31,17 @@ export const Nav = () => {
 
     try {
       setIsLoggingOut(true);
-      await axios.get(`${API}/auth/logout`, { withCredentials: true });
-      localStorage.removeItem("login");
-      navigate("/login");
+      // Force logout even if request fails
+      await axios.get(`${API}/auth/logout`, {
+        withCredentials: true,
+        timeout: 5000, // Ensure request doesn't hang
+      });
     } catch (err) {
-      console.error("Logout failed:", err);
-      alert("Logout failed. Please try again.");
+      console.log("Proceeding with logout despite error:", err);
     } finally {
+      // Always perform client-side cleanup
+      await refreshCookie();
+      navigate("/login");
       setIsLoggingOut(false);
     }
   };

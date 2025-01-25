@@ -39,10 +39,6 @@ func IsVideoIdURL(path string) bool {
 	match, _ := regexp.MatchString(`^/video/\d+/?$`, path)
 	return match
 }
-func IsVideoURL(path string) bool {
-	match, _ := regexp.MatchString(`^/video/?$`, path)
-	return match
-}
 
 // validateCommentOwnership checks if the comment belongs to the current user
 func ValidateCommentIdOwnership(w http.ResponseWriter, commentId string, userId uint) bool {
@@ -78,16 +74,6 @@ func ValidateVideoIdOwnership(w http.ResponseWriter, videoId string, userId uint
 
 	if video.UserID != userId {
 		http.Error(w, "Unauthorized: You do not own this video", http.StatusUnauthorized)
-		return false
-	}
-
-	return true
-}
-
-func ValidateVideosOwnership(w http.ResponseWriter, userId uint) bool {
-	var videos []models.VideoData
-	if err := initializers.DB.Find(&videos, "user_id=?", userId).Error; err != nil {
-		http.Error(w, "Videos not found", http.StatusNotFound)
 		return false
 	}
 

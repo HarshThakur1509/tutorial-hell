@@ -89,8 +89,11 @@ func PostVideo(w http.ResponseWriter, r *http.Request) {
 
 func ListVideo(w http.ResponseWriter, r *http.Request) {
 
+	// Get user from the context
+	userID := r.Context().Value("userID")
+
 	var video []models.VideoData
-	initializers.DB.Preload("Comments").Find(&video)
+	initializers.DB.Preload("Comments").Find(&video, "user_id=?", userID)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

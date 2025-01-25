@@ -13,6 +13,7 @@ const VideoEmbed = memo(({ width, height, src, title }) => {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerPolicy="strict-origin-when-cross-origin"
         allowFullScreen
+        style={{ maxWidth: width, maxHeight: height, aspectRatio: "16/9" }}
       ></iframe>
     </div>
   );

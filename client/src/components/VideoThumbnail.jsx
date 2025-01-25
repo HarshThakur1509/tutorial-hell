@@ -12,6 +12,7 @@ const VideoThumbnail = memo(({ src, alt, width, height }) => {
           maxWidth: width,
           height: "100%",
           maxHeight: height,
+          aspectRatio: "16/9",
         }}
       />
     </div>
