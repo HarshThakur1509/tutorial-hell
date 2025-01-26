@@ -6,7 +6,7 @@ import axios from "axios";
 import useCheckCookie from "./useCheckCookie";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 
-const API = "http://localhost:3000";
+const API = "https://youtube.harshthakur.site/api";
 
 export const Register = () => {
   const { cookieExists } = useCheckCookie();

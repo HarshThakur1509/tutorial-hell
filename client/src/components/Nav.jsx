@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import useCheckCookie from "./useCheckCookie";
 
-const API = "http://localhost:3000";
+const API = "https://youtube.harshthakur.site/api";
 
 export const Nav = () => {
   const navigate = useNavigate();

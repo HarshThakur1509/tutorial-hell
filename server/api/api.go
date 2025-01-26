@@ -22,6 +22,7 @@ func (s *ApiServer) Run() error {
 	router := http.NewServeMux()
 
 	router.HandleFunc("GET /health", controllers.Health)
+	router.HandleFunc("GET /test", controllers.Test)
 
 	// USER AUTHENTICATION
 
@@ -53,16 +54,18 @@ func (s *ApiServer) Run() error {
 	stack := middleware.MiddlewareChain(middleware.RecoveryMiddleware, middleware.Logger)
 
 	corsHandler := cors.New(cors.Options{
-		// AllowedOrigins:   []string{"https://tutorial.harshthakur.site", "https://www.tutorial.harshthakur.site", "https://www.youtube.com"}, // Specify your frontend origin
 		AllowedOrigins: []string{
 			"chrome-extension://ookoamekfiigagodlifaglakmjggchen", // Allow Chrome extension
-			"http://localhost",
+			"https://youtube.harshthakur.site",
+			"https://www.youtube.harshthakur.site",
 			"https://www.youtube.com"}, // Specify your frontend origin
 		AllowCredentials: true, // Allow cookies and credentials
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{
 			"Content-Type",
 			"Authorization",
+			"Cookie",
+			"Set-Cookie",
 			"Accept",
 			"Origin",
 			"X-Requested-With"},

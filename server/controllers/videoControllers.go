@@ -39,6 +39,12 @@ func Health(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func Test(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(Response{Message: "TEST"})
+}
+
 func PostVideo(w http.ResponseWriter, r *http.Request) {
 
 	var body struct {

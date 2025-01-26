@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loginButton.addEventListener('click', () => {
-        chrome.tabs.create({ url: 'http://localhost/login' });
+        chrome.tabs.create({ url: 'https://youtube.harshthakur.site/login' });
     });
 
     async function checkAuthentication() {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function loadVideos() {
         try {
-            const response = await fetch('http://localhost:3000/video', { credentials: 'include' });
+            const response = await fetch('https://youtube.harshthakur.site/api/video', { credentials: 'include' });
             if (!response.ok) throw new Error('Failed to fetch videos');
 
             const videos = await response.json();

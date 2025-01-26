@@ -1,4 +1,4 @@
-/* styles.css */
+/* Modern Extension Styles */
 :root {
     --primary-color: #EB7674;
     /* Red */
@@ -8,7 +8,7 @@
     /* Light background */
     --text-color: #1f2937;
     /* Dark text */
-    --card-background: #f3f4f6;
+    --card-background: #f8f9fa;
     /* Light card background */
     --border-color: #e5e7eb;
     /* Light border */
@@ -17,14 +17,14 @@
     --success-color: #16a34a;
     /* Green */
     --border-radius: 12px;
-    /* Slightly larger border radius */
+    /* Rounded corners */
     --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* Subtle shadow */
     --transition: all 0.3s ease;
     /* Smooth transitions */
 }
 
-/* Dark Theme Variables */
+/* Dark Theme */
 [data-theme="dark"] {
     --background-color: #1f2937;
     /* Dark background */
@@ -36,129 +36,95 @@
     /* Dark border */
 }
 
-/* General Styles */
+::-webkit-scrollbar {
+    height: 12px;
+    width: 14px;
+    background: transparent;
+    z-index: 12;
+    overflow: visible;
+}
+
+::-webkit-scrollbar-track {
+    background: #1b2838;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: #434953;
+    border-radius: 10px;
+    z-index: 12;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    transition: background-color .32s ease-in-out;
+    margin: 4px;
+    min-height: 32px;
+    min-width: 32px;
+}
+
+::-webkit-scrollbar-corner {
+    background: #202020;
+}
+
+::selection {
+    background: #54a5d4;
+    text-shadow: 1px 1px 2px #000000aa;
+    color: #fff;
+}
+
+/* Base Styles */
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     margin: 0;
-    padding: 0;
+    padding: 1rem;
     line-height: 1.6;
     transition: var(--transition);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    height: 100%;
+    min-width: 300px;
 }
 
-a {
-    text-decoration: none;
-    color: var(--primary-color);
-    transition: var(--transition);
-}
-
-a:hover {
-    text-decoration: underline;
-    opacity: 0.8;
-}
-
-button {
-    cursor: pointer;
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: var(--transition);
-    background-color: var(--primary-color);
-    color: white;
-}
-
-button:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-input,
-textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: var(--card-background);
-    color: var(--text-color);
-    transition: var(--transition);
-    font-size: 1rem;
-}
-
-input:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(235, 118, 116, 0.1);
-    /* Red focus shadow */
-}
-
-/* Popup Styles */
-
-
+/* Container */
 .container {
     background-color: var(--card-background);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 20px;
-    width: 350px;
+    padding: 1.5rem;
     max-width: 100%;
     text-align: center;
-    height: 100%;
 }
 
+/* Header */
 .header {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
 .header h1 {
     color: var(--primary-color);
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin: 0 0 10px;
+    margin: 0 0 0.5rem;
 }
 
 .header p {
-    font-size: 14px;
-    color: #666;
+    font-size: 0.875rem;
+    color: var(--text-color);
+    opacity: 0.8;
     margin: 0;
 }
 
-.login-container {
-    margin-bottom: 20px;
-}
 
-.login-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: var(--transition);
-}
 
-.login-button:hover {
-    background-color: var(--secondary-color);
-}
-
+/* Video List */
 .video-list {
-    margin-top: 20px;
+    margin-top: 1.5rem;
 }
 
 .video-item {
     background-color: var(--card-background);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 15px;
-    margin-bottom: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
     text-align: left;
     transition: var(--transition);
 }
@@ -171,7 +137,7 @@ textarea:focus {
 .video-item img {
     width: 100%;
     border-radius: var(--border-radius);
-    margin-bottom: 10px;
+    margin-bottom: 0.75rem;
 }
 
 .video-item a {
@@ -186,66 +152,86 @@ textarea:focus {
 }
 
 .video-time {
-    font-size: 12px;
-    color: #666;
-    margin-top: 5px;
+    font-size: 0.75rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+}
+
+/* Login */
+.login-container {
+    display: flex;
+    justify-content: center;
+}
+
+.login-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-button:hover {
+    /* Hover Effects */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: var(--primary-color);
+}
+
+.login-button:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.login-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Loading State */
 .loading {
-    font-size: 14px;
-    color: #666;
+    font-size: 0.875rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    text-align: center;
+    padding: 1rem;
 }
 
 .no-videos {
-    font-size: 14px;
-    color: #666;
+    font-size: 0.875rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    text-align: center;
+    padding: 1rem;
 }
 
 .error {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: var(--error-color);
+    text-align: center;
+    padding: 1rem;
 }
 
-/* Theme Toggle Icons */
-.theme-toggle {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-left: 1rem;
-    font-size: 1.5rem;
-    transition: var(--transition);
-}
 
-.theme-toggle .theme-icon {
-    transition: var(--transition);
-    opacity: 0.5;
-}
-
-.theme-toggle .theme-icon:first-child {
-    display: none;
-}
-
-[data-theme="dark"] .theme-toggle .theme-icon:first-child {
-    display: inline;
-}
-
-[data-theme="dark"] .theme-toggle .theme-icon:last-child {
-    display: none;
-}
-
-.theme-toggle:hover .theme-icon {
-    opacity: 1;
-}
-
-/* Custom Button Styles (for content.js) */
+/* Custom Button */
 #customButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 45px;
+    height: 45px;
     padding: 0;
     border: none;
     background: transparent;
@@ -274,35 +260,10 @@ textarea:focus {
 }
 
 #customButton path {
-    fill: #fff;
+    fill: white;
 }
 
-/* Loading State */
-#customButton.loading {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-#customButton.loading svg {
-    animation: pulse 1.5s infinite;
-}
-
-.timestamp-tooltip {
-    z-index: 9999;
-    box-shadow: var(--box-shadow);
-    pointer-events: none;
-    position: absolute;
-    background: var(--success-color);
-    color: white;
-    padding: 8px;
-    border-radius: var(--border-radius);
-    font-size: 12px;
-    bottom: 45px;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
+/* Loading Animation */
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -315,4 +276,30 @@ textarea:focus {
     100% {
         transform: scale(1);
     }
+}
+
+#customButton.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+#customButton.loading svg {
+    animation: pulse 1.5s infinite;
+}
+
+/* Tooltip */
+.timestamp-tooltip {
+    z-index: 9999;
+    box-shadow: var(--box-shadow);
+    pointer-events: none;
+    position: absolute;
+    background: var(--success-color);
+    color: white;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    font-size: 0.75rem;
+    bottom: 45px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
 }

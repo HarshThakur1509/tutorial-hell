@@ -11,11 +11,11 @@
     ],
     "host_permissions": [
         "https://www.youtube.com/*",
-        "http://localhost:3000/*",
-        "http://localhost/*"
+        "https://youtube.harshthakur.site/api/*",
+        "https://youtube.harshthakur.site/*"
     ],
     "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http://localhost:3000 https://www.youtube.com http://localhost"
+        "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://youtube.harshthakur.site/api https://www.youtube.com https://youtube.harshthakur.site"
     },
     "content_scripts": [{
         "matches": ["https://www.youtube.com/*"],

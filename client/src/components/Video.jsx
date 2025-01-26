@@ -4,7 +4,7 @@ import { VideoEmbed } from "./VideoEmbed";
 import { Comment } from "./Comment";
 import axios from "axios";
 
-const API = "http://localhost:3000";
+const API = "https://youtube.harshthakur.site/api";
 
 export const Video = () => {
   const { id } = useParams();

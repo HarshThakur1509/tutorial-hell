@@ -4,7 +4,7 @@ import { VideoThumbnail } from "./VideoThumbnail";
 import axios from "axios";
 import useCheckCookie from "./useCheckCookie";
 
-const API = "http://localhost:3000";
+const API = "https://youtube.harshthakur.site/api";
 
 export const Home = () => {
   const { cookieExists, loading } = useCheckCookie();

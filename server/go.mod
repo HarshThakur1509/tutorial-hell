@@ -4,7 +4,6 @@ go 1.23.5
 
 require (
 	github.com/gorilla/sessions v1.4.0
-	github.com/joho/godotenv v1.5.1
 	github.com/markbates/goth v1.80.0
 	github.com/rs/cors v1.11.1
 	golang.org/x/crypto v0.32.0

@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/HarshThakur1509/tutorial-hell/backend/api"
@@ -45,7 +46,7 @@ func init() {
 		Path:     "/",
 		MaxAge:   86400 * 30, // 30 days
 		Domain:   domain,
-		// SameSite: http.SameSiteNoneMode,
+		SameSite: http.SameSiteNoneMode,
 	}
 
 	gothic.Store = store
