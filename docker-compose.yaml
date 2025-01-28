@@ -27,7 +27,7 @@ services:
       - GOOGLE_CALLBACK_URL=${GOOGLE_CALLBACK_URL}
       - REDIRECT_SECURE=${REDIRECT_SECURE}
       - SESSION_COOKIE_DOMAIN=${SESSION_COOKIE_DOMAIN}
-      - ENV=
+      - ENV=${ENV}
     ports:
       - "3000:3000"
     depends_on:
@@ -39,6 +39,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 10s
 
   postgres:
     image: postgres:17
