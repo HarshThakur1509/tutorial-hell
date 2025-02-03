@@ -1,54 +1,48 @@
 services:
   client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+    image: 982534376867.dkr.ecr.ap-south-1.amazonaws.com/tutorial-hell-frontend:latest
     ports:
       - "5173:5173"
     environment:
       - NODE_ENV=production
+    networks:
+      - app-network
     depends_on:
       - server
     restart: unless-stopped
 
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: 982534376867.dkr.ecr.ap-south-1.amazonaws.com/tutorial-hell-backend:latest
     environment:
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - SECRET=${SECRET}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - GOOGLE_CALLBACK_URL=${GOOGLE_CALLBACK_URL}
-      - REDIRECT_SECURE=${REDIRECT_SECURE}
-      - SESSION_COOKIE_DOMAIN=${SESSION_COOKIE_DOMAIN}
-      - ENV=${ENV}
+      - DB_USER=postgres
+      - DB_PASSWORD=harsh1592
+      - DB_NAME=youtube
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - SECRET=
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_CLIENT_SECRET=
+      - GOOGLE_CALLBACK_URL=https://youtube.harshthakur.site/api/auth/callback?provider=google
+      - REDIRECT_SECURE=https://youtube.harshthakur.site
+      - SESSION_COOKIE_DOMAIN=youtube.harshthakur.site
+      - ENV=production
     ports:
       - "3000:3000"
+    networks:
+      - app-network
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
   postgres:
-    image: postgres:17
+    image: postgres:17-alpine
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: harsh1592
+      POSTGRES_DB: youtube
+    networks:
+      - app-network
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -62,3 +56,7 @@ services:
 volumes:
   postgres-data:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge

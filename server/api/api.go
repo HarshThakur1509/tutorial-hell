@@ -38,7 +38,6 @@ func (s *ApiServer) Run() error {
 
 	authRouter.HandleFunc("GET /auth/logout", controllers.GothLogout)
 	authRouter.HandleFunc("GET /api/user", controllers.GetUser)
-	// authRouter.HandleFunc("GET /logout", controllers.CustomLogout)
 
 	authRouter.HandleFunc("POST /send", controllers.PostVideo)
 
